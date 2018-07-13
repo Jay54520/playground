@@ -18,6 +18,8 @@ The db.collection.aggregate() method returns a cursor by default.
 from pymongo import MongoClient
 from unittest import TestCase
 
+TEN_MB_BYTES = 10 ** 7
+
 
 class TestAggregateSizeLimit(TestCase):
 
@@ -25,8 +27,7 @@ class TestAggregateSizeLimit(TestCase):
         self.client = MongoClient()
         self.coll = self.client['test-database']['test-collection']
 
-        with open('10mb.txt', 'r') as f:
-            content = f.read()
+        content = self._get_ten_mb_string()
 
         self.coll.insert_one({
             'filename': 1,
@@ -67,3 +68,7 @@ class TestAggregateSizeLimit(TestCase):
             print('结果中的单个文件超过 16MB，有问题')
         else:
             print('结果中的单个文件超过 16MB，没有问题')
+
+    def _get_ten_mb_string(self):
+        string = '1'
+        return string * TEN_MB_BYTES
